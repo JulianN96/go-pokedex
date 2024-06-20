@@ -1,36 +1,26 @@
 package main
 
 import (
-	"fmt"
+	"github.com/JulianN96/pokedex/internal/pokeapi"
+	"time"
 )
 
+type config struct {
+	//Stateful information goes here
+	pokeapiClient pokeapi.Client
+	nextLocationAreaURL *string
+	prevLocationAreaURL *string
+	caughtPokemon map[string]pokeapi.Pokemon
+}
 
 
 func main(){
-	fmt.Println("Pokedex online.")
 
-	type cliCommand struct {
-		name string
-		description string
-		callback func() error
-	}
+	cfg := config {
+		pokeapiClient: pokeapi.NewClient(time.Hour),
+		caughtPokemon: make(map[string]pokeapi.Pokemon),
 
-	func commandHelp(){
-		fmt.Println("HelpCommand")
 	}
-
-	return map[string]cliCommand{
-		"help": {
-			name: "help",
-			description: "Displays a help message",
-			callback: commandHelp,
-		},
-		"exit": {
-			name: "exit",
-			description: "Exit the Pokedex",
-			callback: commandExit,
-		},
-		
-	}
+	startRepl(&cfg)
 
 }
